@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import productRouter from "./Routes/productRoute.js";
 import globalErrorHandler from "./Controller/errorController.js";
+import AppError from "./utils/appError.js";
 
 const app = express();
 app.use(express.json());
@@ -20,12 +21,30 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
+//first midddleware
+//cereating our middle ware to get data form body without req.body
+// app.use((req, res, next) => {
+//   let rawData = "";
+//   req.on("data", (chunk) => {
+//     console.log("Receiving data in chunks...", chunk);
+//     rawData += chunk;
+//   });
+//   req.on("end", () => {
+//     //console.log("All data received", rawData.toString("utf-8"));
+//     req.body = rawData;
+//     next();
+//   });
+// });
+
 //our routes
 app.use("/api/v1/products", productRouter);
+
+//if No route matches, catch all undefined routes (404 handler)
+app.use((req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!!!`, 404));
+});
 
 //making error handling middleware which can be used anywhere in the app
 app.use(globalErrorHandler);
 
-// module.exports = app;
-// export default app;
 export default app;

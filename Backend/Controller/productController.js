@@ -21,6 +21,7 @@ const deleteProduct = catchAsync(async (req, res, next) => {
 
 //create new Products
 const createNewProduct = catchAsync(async (req, res, next) => {
+  // req.body = JSON.parse(req.body);
   const newProduct = await Product.create(req.body);
 
   res.status(201).json({
@@ -73,6 +74,21 @@ const deleteProductById = catchAsync(async (req, res, next) => {
   });
 });
 
+//Search product by name
+const searchProductByName = catchAsync(async (req, res, next) => {
+  const queryObj = { ...req.query };
+  const { name } = queryObj;
+  const products = await Product.find({ name: { $regex:`^${name}`, $options:"i" } });
+  if(!products){
+    return next(new AppError("No product found with that name",404));
+  }
+  res.status(200).json({
+    status:"true",
+    message:products
+  })
+
+});
+
 export {
   getProducts,
   deleteProduct,
@@ -80,4 +96,5 @@ export {
   getProductById,
   updateProductById,
   deleteProductById,
+  searchProductByName,
 };
