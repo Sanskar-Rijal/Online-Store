@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
@@ -26,14 +27,14 @@ const userSchema = new mongoose.Schema(
       trim: true,
       select: false, //it won't show up in any routes
     },
+    passwordResetToken: String,
+    passwordResetExpires: String,
     avatar: {
       public_id: {
         type: String,
-        required: true,
       },
       url: {
         type: String,
-        required: true,
       },
     },
     role: {
@@ -52,6 +53,18 @@ const userSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+//using document middleware to hash the password, runs on save and create
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    // if password is not modified then we don't need to hash it again
+    return;
+  }
+  //13 is the cost parameter, higher the cost more secure but slower the hashing
+  this.password = await bcrypt.hash(this.password, 13);
+  //call the next middleware, in express 5 it automatically goes to next after promise is resolved
+  //next();
+});
 
 const User = mongoose.model("User", userSchema);
 
