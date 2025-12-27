@@ -1,0 +1,95 @@
+import AppError from "../utils/appError.js";
+import catchAsync from "../utils/catchAsync.js";
+import User from "../Models/user.js";
+//get myself
+const getMe = catchAsync(async (req, res, next) => {
+  //using cookie to get the current user from protect route
+  const { user } = req;
+  if (!user) {
+    return next(new AppError("There is no user logged in", 401));
+  }
+  res.status(200).json({
+    status: "true",
+    message: user,
+  });
+});
+
+//update userProfile
+const updateProfile = catchAsync(async (req, res, next) => {
+  const userid = req.user.id;
+  const updatedData = {
+    email: req.body.email,
+    name: req.body.name,
+  };
+  //update user data using patch request
+  const updatedUser = await User.findByIdAndUpdate(userid, updatedData, {
+    new: true,
+  });
+
+  if (!updatedUser) {
+    return next(new AppError("User not found", 404));
+  }
+
+  res.status(200).json({
+    status: "true",
+    message: updatedUser,
+  });
+});
+
+//Get all users - ADMIN
+const getAllUsers = catchAsync(async (req, res, next) => {
+  const users = await User.find();
+  if (!users) {
+    return next(new AppError("No users found", 404));
+  }
+  res.status(200).json({
+    status: "true",
+    message: users,
+  });
+});
+
+//Get a user by ID - ADMIN
+const getUserbyId = catchAsync(async (req, res, next) => {
+  const userId = req.params.id;
+  const user = await User.findById(userId);
+  if (!user) {
+    return next(new AppError("User not found with that id", 404));
+  }
+  res.status(200).json({
+    status: "true",
+    message: user,
+  });
+});
+
+//update user - ADMIN
+const updateUser = catchAsync(async (req, res, next) => {
+  const userId = req.params.id;
+  //do not change password with this
+  req.body.password = undefined;
+  const user = await User.findByIdAndUpdate(userId, req.body, {
+    new: true,
+  });
+  if (!user) {
+    return next(new AppError("User not found with that id", 404));
+  }
+  res.status(200).json({
+    status: "true",
+    message: user,
+  });
+});
+
+//delete user - ADMIN
+const deleteUser = catchAsync(async (req, res, next) => {
+  const userId = req.params.id;
+  const deletedUser = await User.findByIdAndDelete(userId);
+  //delete avatar from cloudinary if implemented 
+  if(!deletedUser){
+    return next(new AppError("User not found with that id",404));
+  }
+  res.status(204).json({
+    status:"true",
+    message:"Deleted successfully"
+  })
+});
+
+export { getMe, updateProfile, getAllUsers, getUserbyId, updateUser ,deleteUser};

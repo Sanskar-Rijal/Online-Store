@@ -7,7 +7,15 @@ import {
   resetPassword,
   signup,
   updatePassword,
+  restrictTo,
 } from "../Controller/authController.js";
+import {
+  deleteUser,
+  getAllUsers,
+  getMe,
+  getUserbyId,
+  updateProfile,
+} from "../Controller/userController.js";
 
 const router = express.Router();
 
@@ -24,5 +32,19 @@ router.post("/updatePassword", protect, updatePassword);
 router.post("/forgotPassword", forgotPassword);
 //reset password, using the token
 router.post("/resetPassword/:token", resetPassword);
+//get own profile
+router.get("/getMe", protect, getMe);
+//updaet userProfile
+router.patch("/updateProfile", protect, updateProfile);
+
+//ADMIN ROUTES
+//get all users
+router.get("/", protect, restrictTo("admin"), getAllUsers);
+//find user by id
+router
+  .route("/:id")
+  .get(protect, restrictTo("admin"), getUserbyId)
+  .delete(protect, restrictTo("admin"), deleteUser)
+  .patch(protect, restrictTo("admin"), updateProfile);
 
 export default router;
