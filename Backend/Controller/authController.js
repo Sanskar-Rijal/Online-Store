@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import util from "util";
+import crypto from "crypto";
 import User from "../Models/user.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
@@ -186,10 +187,11 @@ const forgotPassword = catchAsync(async (req, res, next) => {
   const resetURL = `${req.protocol}://${req.get("host")}/api/v1/users/resetPassword/${resetToken}`;
 
   try {
-    await new Email(user, resetURL).sendPasswordReset();
+    //await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
       status: "success",
+      token: resetToken,
       message: "Token sent to email! Have a look sweetheart :)",
     });
   } catch (err) {
@@ -212,6 +214,38 @@ const forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
+//finally reset the password with the help of token
+const resetPassword = catchAsync(async (req, res, next) => {
+  //1)Get user based on the token
+  //we get the token , hash it again and compare with the token in the database
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+
+  //now we have to find the user based on this token and also check whether the token is expired or not
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() }, //token expiry time should be greate than current time
+  });
+
+  // if (!user || user.passwordResetExpires < Date.now()) { we can do this also but i did in findone
+  // }
+  if (!user) {
+    return next(new AppError("Token is invalid or has expired", 400));
+  }
+  //2)If the token is not expired and there is user, set the new password
+  user.password = req.body.password;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+
+  res.status(200).json({
+    status: "true",
+    message: "Password changed successfully",
+  });
+});
+
 export {
   signup,
   login,
@@ -220,4 +254,5 @@ export {
   restrictTo,
   updatePassword,
   forgotPassword,
+  resetPassword,
 };

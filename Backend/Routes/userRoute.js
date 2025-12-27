@@ -4,6 +4,7 @@ import {
   login,
   logout,
   protect,
+  resetPassword,
   signup,
   updatePassword,
 } from "../Controller/authController.js";
@@ -19,7 +20,9 @@ router.post("/login", login);
 router.get("/logout", logout);
 //for update password
 router.post("/updatePassword", protect, updatePassword);
-//for forgotPassword
+//for forgotPassword, just to get token
 router.post("/forgotPassword", forgotPassword);
+//reset password, using the token
+router.post("/resetPassword/:token", resetPassword);
 
 export default router;
