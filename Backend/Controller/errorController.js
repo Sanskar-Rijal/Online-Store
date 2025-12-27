@@ -47,6 +47,16 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handleJWTError = (err)=>{
+  const message = `Oops! an Error Occured ${err.message}.Please login again`;
+  return new AppError(message,401);
+}
+
+const handleJWTExpiry = (err)=>{
+  const message = `Oops! an Error Occured ${err.message}.Please login again`;
+  return new AppError(message,401);
+}
+
 //this is our global error handler middleware
 const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
@@ -75,6 +85,16 @@ const globalErrorHandler = (err, req, res, next) => {
      //error no 3 , validation error, if user enters soemthing that doesn't match the schema
     if (error.name === "ValidationError") {
       error = handleValidationErrorDB(error);
+    }
+
+    //error no 4, jwt error i.e invalid token
+    if(error.name ==="JsonWebTokenError"){
+      error  = handleJWTError(error);
+    }
+
+    //error no 5, if jwt expired 
+    if(error.name === "TokenExpiredError"){
+      error = handleJWTExpiry(error);
     }
 
     sendErrorProd(error,res);

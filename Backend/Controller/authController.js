@@ -3,6 +3,7 @@ import util from "util";
 import User from "../Models/user.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
+import Email from "../utils/email.js";
 
 //putting information in jwt payload
 const signToken = (userid) =>
@@ -29,7 +30,6 @@ const createSendToken = (user, statusCode, res) => {
     status: "true",
     message: {
       user,
-      token: token,
     },
   });
 };
@@ -45,6 +45,9 @@ const signup = catchAsync(async (req, res, next) => {
     password: req.body.password,
   });
 
+  //send welcome email to the user
+  const url = `${req.protocol}://${req.get("host")}/login`;
+  await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, res);
 });
 
@@ -138,4 +141,83 @@ const restrictTo =
     next();
   };
 
-export { signup, login, protect, logout, restrictTo };
+//Logic for Update password
+const updatePassword = catchAsync(async (req, res, next) => {
+  //1)Read the user from the JWT token
+  const userid = req.user.id;
+  //we had set select:false for password in user model so we have to explicitly select it
+  const user = await User.findById(userid).select("+password");
+  //2)Check if posted and current password is correct
+  const valid = await user.correctPassword(
+    req.body.currentPassword,
+    user.password
+  );
+  //if not valid then throw error
+  if (!valid) {
+    return next(new AppError("Current password is incorrect", 401));
+  }
+
+  //3)If reached here, everything is fine, so simply update the password
+  user.password = req.body.newPassword;
+  console.log(user.password);
+
+  //we have to user user.save() here instead of findByIdAndUpdate because
+  //findByIdAndUpdate doesn't run the pre save middleware in usermodel
+  await user.save();
+  //4)Log the user in, send JWT
+  createSendToken(user, 200, res);
+});
+
+//Logic for forget password
+//1)make a route to get user email, and check whether the email exists or note
+//2)If exists, generate a random reset token hash it and save it in the databas and send the plain token to the user.
+//3)When user send the token back to the reset password route, hash the token and compare it with the stored token in the database
+const forgotPassword = catchAsync(async (req, res, next) => {
+  //1)Get user based on posted email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError("There is no user with that email address", 404));
+  }
+  //2)Generate random reset token
+  const resetToken = user.createPasswordResetToken();
+  await user.save({ validateBeforeSave: false }); //we are disabling validator so that we can save the reset token and expirytime without required fields
+
+  //3)Send it to user's email
+  const resetURL = `${req.protocol}://${req.get("host")}/api/v1/users/resetPassword/${resetToken}`;
+
+  try {
+    await new Email(user, resetURL).sendPasswordReset();
+
+    res.status(200).json({
+      status: "success",
+      message: "Token sent to email! Have a look sweetheart :)",
+    });
+  } catch (err) {
+    //if SendEmail fails then we have to reset the fields that we set before
+    //we reset passwordResetExpires and passwordResetToken to undefined
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    //this only modifies the data , doesn't save it to the database
+    //so we have to save it
+    await user.save({ validateBeforeSave: false });
+
+    console.log(err);
+
+    return next(
+      new AppError(
+        "There was an error sending the email, Try again later!",
+        500
+      )
+    );
+  }
+});
+
+export {
+  signup,
+  login,
+  protect,
+  logout,
+  restrictTo,
+  updatePassword,
+  forgotPassword,
+};

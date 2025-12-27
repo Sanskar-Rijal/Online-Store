@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const userSchema = new mongoose.Schema(
   {
@@ -90,6 +91,22 @@ userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
   }
   //returh false if there is noPasswordChangedAt
   return false;
+};
+
+//creating instance to generate token for forgot password
+userSchema.methods.createPasswordResetToken = function () {
+  //it will create a random string of 32 bytes and convert it to hex format
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  //hashing the token and storing it in the database
+  const tokenHash = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.passwordResetToken = tokenHash;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; //10 minutes from now
+  //return the plain token to the user
+  return resetToken;
 };
 
 const User = mongoose.model("User", userSchema);
