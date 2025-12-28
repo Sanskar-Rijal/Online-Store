@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const orderSchema = new mongoose.Schema(
   {
     shippingInfo: {
@@ -15,9 +16,9 @@ const orderSchema = new mongoose.Schema(
         type: String,
         required: [true, "Phone number field is required"],
       },
-      postalCode: {
+      zipCode: {
         type: String,
-        required: [true, "Postal code field is required"],
+        required: [true, "Zipcode field is required"],
       },
       country: {
         type: String,
@@ -92,15 +93,10 @@ const orderSchema = new mongoose.Schema(
     },
     orderStatus: {
       type: String,
-      required: true,
       default: "Processing",
     },
     deliveredAt: {
       type: Date,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
     },
   },
   {
@@ -109,6 +105,16 @@ const orderSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+//using Query middleware to populate user
+orderSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "user",
+    select: "name email",
+  });
+});
+
+
 
 const Order = mongoose.model("Order", orderSchema);
 

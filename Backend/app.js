@@ -6,6 +6,7 @@ import productRouter from "./Routes/productRoute.js";
 import globalErrorHandler from "./Controller/errorController.js";
 import AppError from "./utils/appError.js";
 import userRouter from "./Routes/userRoute.js";
+import orderRouter from "./Routes/orderRoute.js";
 
 const app = express();
 app.use(express.json());
@@ -46,6 +47,7 @@ if (process.env.NODE_ENV === "development") {
 //our routes
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/orders", orderRouter);
 
 //if No route matches, catch all undefined routes (404 handler)
 app.use((req, res, next) => {
