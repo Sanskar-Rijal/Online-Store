@@ -31,14 +31,27 @@ const createReview = catchAsync(async (req, res, next) => {
 //delete review
 const deleteReview = catchAsync(async (req, res, next) => {
   const reviewId = req.params.id;
-  const review = await Review.findByIdAndDelete(reviewId);
-  if (!review) {
-    return next(new AppError("No review found with this id", 404));
+  //Check whether review is written by the current user or not
+  const userId = req.user.id;
+  // const review = await Review.findByIdAndDelete(reviewId);
+  const review = await Review.findById(reviewId);
+  if (review?.user?.toString() !== userId) {
+    return next(new AppError("You cannot delete this review", 404));
   }
+  //now delete the review safely
+  await Review.findByIdAndDelete(reviewId);
   res.status(204).json({
     success: "true",
     message: "Review deleted successfully",
   });
 });
 
-export { createReview, deleteReview };
+//get all reveiws for a product
+const getAllReviews = catchAsync(async (req, res, next) => {
+  const reviews = await Review.find().select("-__v");
+  res.status(200).json({
+    success: "true",
+    message: reviews,
+  });
+});
+export { createReview, deleteReview, getAllReviews };
