@@ -25,7 +25,13 @@ const productSchema = new mongoose.Schema(
         "A product description must have less or equal then 1000 characters ",
       ],
     },
-    ratings: {
+    ratingsAverage: {
+      //this is the average rating
+      type: Number,
+      default: 0.0,
+    },
+    ratingsQuantity: {
+      //this is the no of ratings
       type: Number,
       default: 0,
     },
@@ -83,6 +89,15 @@ const productSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+productSchema.index({ price: 1, ratingsAverage: -1 }); //1 means ascending order and -1 means descending order
+
+//virtual populate for reviews
+productSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "product",
+  localField: "_id", //field in the current model that should match the foreign field
+});
 
 const Product = mongoose.model("Product", productSchema);
 export default Product;

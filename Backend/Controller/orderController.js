@@ -101,10 +101,24 @@ const updateOrderStatusAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
+//Delete order -- ADMIN
+const deleteOrderAdmin = catchAsync(async (req, res, next) => {
+  const orderId = req.params.id;
+  if (!orderId) {
+    return next(new AppError("Please provide order id first", 400));
+  }
+  await Order.findByIdAndDelete(orderId);
+  res.status(204).json({
+    success: "true",
+    message: "Order deleted successfully",
+  });
+});
+
 export {
   createOrder,
   getSingleOrder,
   getmyOrder,
   getAllOrdersAdmin,
   updateOrderStatusAdmin,
+  deleteOrderAdmin,
 };

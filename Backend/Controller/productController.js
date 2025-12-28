@@ -4,7 +4,7 @@ import AppError from "../utils/appError.js";
 import APIFeatures from "../utils/apiFeatures.js";
 
 //get all products
-const getProducts = catchAsync(async (req, res, next) => {
+const getallProducts = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(Product.find(), req.query)
     .search()
     .filter()
@@ -49,7 +49,11 @@ const createNewProduct = catchAsync(async (req, res, next) => {
 
 //find products by id
 const getProductById = catchAsync(async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
+  //using populate to show reviews of that product
+  const product = await Product.findById(req.params.id).populate({
+    path: "reviews",
+    select: "-__v",
+  });
 
   if (!product) {
     return next(new AppError("No product found with that ID", 404));
@@ -92,7 +96,7 @@ const deleteProductById = catchAsync(async (req, res, next) => {
 });
 
 export {
-  getProducts,
+  getallProducts,
   deleteProduct,
   createNewProduct,
   getProductById,

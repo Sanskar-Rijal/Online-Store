@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createOrder,
+  deleteOrderAdmin,
   getAllOrdersAdmin,
   getmyOrder,
   getSingleOrder,
@@ -16,6 +17,7 @@ router.route("/").get(protect, restrictTo("admin"), getAllOrdersAdmin);
 router
   .route("/:id")
   .patch(protect, restrictTo("admin"), updateOrderStatusAdmin)
+  .delete(protect, restrictTo("admin"), deleteOrderAdmin)
   .get(protect, getSingleOrder);
 
 //Get all orders admin only

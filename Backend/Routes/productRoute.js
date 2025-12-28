@@ -3,7 +3,7 @@ import {
   createNewProduct,
   deleteProductById,
   getProductById,
-  getProducts,
+  getallProducts,
   updateProductById,
 } from "../Controller/productController.js";
 import { protect, restrictTo } from "../Controller/authController.js";
@@ -12,7 +12,7 @@ const router = Router();
 
 router
   .route("/")
-  .get(protect, getProducts)
+  .get(protect, getallProducts)
   .post(protect, restrictTo("admin"), createNewProduct);
 
 //find by id route
