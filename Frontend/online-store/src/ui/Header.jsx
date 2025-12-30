@@ -7,34 +7,32 @@ import { LuLogOut, LuShoppingCart } from "react-icons/lu";
 
 function Header() {
   const cartItems = 5;
-  const user = {
-    name: "Sanskar Rijal",
-  };
+  const user = false;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/60">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex  items-center justify-between">
+        <div className="flex items-center justify-between">
           {/* displaying icons */}
-          <Link className="flex items-center gap-2 cursor-pointer" to="/">
+          <Link className="flex cursor-pointer items-center gap-2" to="/">
             {/* displaying logo  and the text */}
-            <div className="h-8 w-8  rounded-lg bg-purple-600 flex items-center justify-center ">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-600">
               <LuShoppingCart className="h-5 w-5 text-white" />
             </div>
             {/* displaying name */}
-            <span className="text-2xl text-gray-900 hidden font-bold sm:block">
+            <span className="hidden text-2xl font-bold text-gray-900 sm:block">
               PurpleStore
             </span>
-            <span className="text-xl text-gray-900 font-bold sm:hidden">
+            <span className="text-xl font-bold text-gray-900 sm:hidden">
               PurpleStore
             </span>
           </Link>
           {/* Search Bar, which is hidden on mobile */}
-          <div className="hidden  md:flex flex-1 max-w-md mx-8">
+          <div className="mx-8 hidden max-w-md flex-1 md:flex">
             <div className="relative w-full">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 " />
+              <FaSearch className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-500" />
               <input
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-3xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                className="w-full rounded-3xl border border-gray-200 bg-white py-2 pr-4 pl-10 text-gray-900 focus:ring-2 focus:ring-purple-400 focus:outline-none"
                 type="text"
                 placeholder="Search Products....."
               />
@@ -44,7 +42,7 @@ function Header() {
           <div className="flex items-center gap-2">
             {/* fav */}
             <Button
-              className="inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+              className="inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
               variant="ghost"
               size="icon"
               to="/wishlist"
@@ -52,14 +50,14 @@ function Header() {
               <FaRegHeart className="h-5 w-4" />
             </Button>
             <Button
-              className="relative inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+              className="relative inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
               variant="ghost"
               size="icon"
               to="/cart"
             >
               <LuShoppingCart className="h-5 w-5" />
               {cartItems > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-purple-600 text-white border-0">
+                <Badge className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center border-0 bg-purple-600 p-0 text-xs text-white">
                   {cartItems}
                 </Badge>
               )}
@@ -71,8 +69,7 @@ function Header() {
                 <Button
                   variant="ghost"
                   to="/userProfile"
-                  className="md:hidden inline-flex gap-3  items-center justify-center  rounded-full text-sm font-medium transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none
-                "
+                  className="inline-flex items-center justify-center gap-3 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50 md:hidden"
                 >
                   <FaRegUser className="h-5 w-5" />
                 </Button>
@@ -80,8 +77,7 @@ function Header() {
                 <Button
                   variant="ghost"
                   to="/userProfile"
-                  className="hidden md:inline-flex gap-3  items-center justify-center  rounded-full text-sm font-medium transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none
-                "
+                  className="hidden items-center justify-center gap-3 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50 md:inline-flex"
                 >
                   <FaRegUser className="h-5 w-5" />
                   {user.name}
@@ -89,7 +85,7 @@ function Header() {
 
                 {/* logout Button */}
                 <Button
-                  className="inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                  className="inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                   variant="ghost"
                   size="icon"
                   to="/"
@@ -98,7 +94,10 @@ function Header() {
                 </Button>
               </>
             ) : (
-              <Button to="/login" className="mx-4">
+              <Button
+                to="/login"
+                className="mx-4 inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+              >
                 Login
               </Button>
             )}
@@ -107,9 +106,9 @@ function Header() {
         {/* mobile Search bar */}
         <div className="mt-4 md:hidden">
           <div className="relative w-full">
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 " />
+            <FaSearch className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-500" />
             <input
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-3xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="w-full rounded-3xl border border-gray-200 bg-white py-2 pr-4 pl-10 text-gray-900 focus:ring-2 focus:ring-purple-400 focus:outline-none"
               type="text"
               placeholder="Search Products....."
             />
