@@ -4,10 +4,15 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import Badge from "./Badge";
 import { LuLogOut, LuShoppingCart } from "react-icons/lu";
+import { useSelector } from "react-redux";
 
 function Header() {
-  const cartItems = 5;
   const user = false;
+
+  //getting total items in cart
+  const totalItemsInCart = useSelector((state) =>
+    state.cart.orderItems.reduce((acc, item) => acc + item.quantity, 0),
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/60">
@@ -39,7 +44,7 @@ function Header() {
             </div>
           </div>
           {/* another div for fav and cart icons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {/* fav */}
             <Button
               className="inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
@@ -56,9 +61,9 @@ function Header() {
               to="/cart"
             >
               <LuShoppingCart className="h-5 w-5" />
-              {cartItems > 0 && (
-                <Badge className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center border-0 bg-purple-600 p-0 text-xs text-white">
-                  {cartItems}
+              {totalItemsInCart > 0 && (
+                <Badge className="absolute -top-1 -right-2 flex h-5 w-5 items-center justify-center border-0 bg-purple-600 text-sm text-white">
+                  {totalItemsInCart > 99 ? "99+" : totalItemsInCart}
                 </Badge>
               )}
             </Button>
@@ -96,7 +101,7 @@ function Header() {
             ) : (
               <Button
                 to="/login"
-                className="mx-4 inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                className="ml-2 inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50 sm:mx-4"
               >
                 Login
               </Button>

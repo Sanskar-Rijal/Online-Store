@@ -12,7 +12,7 @@ const router = Router();
 
 router
   .route("/")
-  .get(protect, getallProducts)
+  .get(getallProducts)
   .post(protect, restrictTo("admin"), createNewProduct);
 
 //find by id route

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Button from "../ui/Button";
-import ProductCard from "../ui/ProductCard";
-
+import Product from "../features/products/Product";
+import Features from "../ui/Features";
+import Banner from "../ui/Banner";
 function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const categories = [
@@ -20,26 +21,28 @@ function HomePage() {
     "Home",
   ];
 
-  const product = [
-    {
-      id: "abcd",
-      name: "Sanskar Rijal",
-      price: 19000,
-      description: "let it go let it go",
-      ratingsAverage: 5,
-      ratingsQuantity: 100,
-      images: [
-        {
-          public_id: "sample",
-          url: "https://i.imgur.com/sWodf8f.jpg",
-          id: "image1",
-        },
-      ],
-      category: "Category kunai xaina pro ho",
-      seller: "Samsung",
-      stock: 50,
-    },
-  ];
+  // const product = [
+  //   {
+  //     id: "abcd",
+  //     name: "Sanskar Rijal",
+  //     price: 19000,
+  //     description: "let it go let it go",
+  //     ratingsAverage: 5,
+  //     ratingsQuantity: 100,
+  //     images: [
+  //       {
+  //         public_id: "sample",
+  //         url: "https://i.imgur.com/sWodf8f.jpg",
+  //         id: "image1",
+  //       },
+  //     ],
+  //     category: "Category kunai xaina pro ho",
+  //     seller: "Samsung",
+  //     stock: 50,
+  //   },
+  // ];
+
+  //React Query to fetch api
 
   //handle click on category
   function handleCategory(category) {
@@ -49,15 +52,7 @@ function HomePage() {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* banner section */}
-      <div className="mb-12 rounded-2xl bg-linear-to-r from-violet-500 to-purple-600 p-6 text-white sm:p-8 md:p-12">
-        <h1 className="mb-4 text-2xl font-bold sm:text-3xl">
-          Welcome to PurpleShop
-        </h1>
-        <p className="max-w-2xl text-base text-white/90 sm:text-lg">
-          Discover the latest Products at amazing prices. Free shipping on all
-          orders over Rupees 1500!!
-        </p>
-      </div>
+      <Banner />
       {/* category section */}
       <div className="mb-8">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 sm:text-xl md:text-2xl">
@@ -74,51 +69,11 @@ function HomePage() {
           </Button>
         ))}
       </div>
-      {/* Product section to be fetched from backend and display here */}
-      <div className="mb-8">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {product.map((item) => (
-            <ProductCard product={item} key={item.id} />
-          ))}
-        </div>
-      </div>
 
+      {/* Product section to be fetched from backend and display here */}
+      <Product category={selectedCategory === "All" ? "" : selectedCategory} />
       {/* features Section */}
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-        {/* 1st column */}
-        <div className="rounded-xl bg-purple-50 p-6 text-center">
-          {/* making circle then inside emoji */}
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-600">
-            <span className="text-2xl text-white">🚚</span>
-          </div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900 md:text-xl">
-            Free Shipping
-          </h3>
-          <p className="text-sm text-gray-600">On all orders above Rs 1500</p>
-        </div>
-        {/* 2nd col */}
-        <div className="rounded-xl bg-purple-50 p-6 text-center">
-          {/* making circle then inside emoji */}
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-600">
-            <span className="text-2xl text-white">🔒</span>
-          </div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900 md:text-xl">
-            Secure Payment
-          </h3>
-          <p className="text-sm text-gray-600">100% secure transactions</p>
-        </div>
-        {/* 3rd column */}
-        <div className="rounded-xl bg-purple-50 p-6 text-center">
-          {/* making circle then inside emoji */}
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-600">
-            <span className="text-2xl text-white">↩️</span>
-          </div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900 md:text-xl">
-            Easy Return
-          </h3>
-          <p className="text-sm text-gray-600">7-day return policy</p>
-        </div>
-      </div>
+      <Features />
     </div>
   );
 }

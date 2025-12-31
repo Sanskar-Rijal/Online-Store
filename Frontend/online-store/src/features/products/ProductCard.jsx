@@ -1,11 +1,29 @@
 import { Link } from "react-router-dom";
-import Button from "./Button";
+import Button from "../../ui/Button";
 import { FaRegHeart, FaHeart, FaRegStar, FaStar } from "react-icons/fa";
 import { useState } from "react";
-import Badge from "./Badge";
+import Badge from "../../ui/Badge";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../ReduxSlices/cartSlice";
 
 function ProductCard({ product }) {
   const [iswishlisted, setWishListed] = useState(false);
+
+  //using dispatch function to add to cart
+  const dispatch = useDispatch();
+
+  //handle addTo cart
+  function handleAddToCart(event) {
+    const productItem = {
+      product: product.id,
+      quantity: 1,
+      price: product.price,
+      name: product.name,
+    };
+    event.preventDefault();
+    event.stopPropagation();
+    dispatch(addToCart(productItem));
+  }
 
   function handleWishList(e) {
     e.preventDefault();
@@ -70,7 +88,10 @@ function ProductCard({ product }) {
           <span className="text-lg font-semibold text-purple-600 sm:text-xl">
             Rs {product.price.toFixed(2)}
           </span>
-          <Button className="inline-flex cursor-pointer items-center justify-center rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50">
+          <Button
+            onClick={handleAddToCart}
+            className="inline-flex cursor-pointer items-center justify-center rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+          >
             Add to Cart
           </Button>
         </div>
