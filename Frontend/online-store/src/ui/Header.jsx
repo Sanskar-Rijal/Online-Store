@@ -91,8 +91,6 @@ function Header() {
                 {/* logout Button */}
                 <Button
                   className="inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                  variant="ghost"
-                  size="icon"
                   to="/"
                 >
                   <LuLogOut className="h-5 w-5" />

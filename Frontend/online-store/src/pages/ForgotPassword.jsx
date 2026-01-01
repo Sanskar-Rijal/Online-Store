@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import useMoveBack from "../hooks/useMoveBack";
 import Button from "../ui/Button";
 
-function Login() {
+function ForgotPassword() {
   const moveBack = useMoveBack();
+  const [email, setEmail] = useState("");
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
@@ -11,10 +12,10 @@ function Login() {
         {/* welcome login to you account  */}
         <div className="space-y-1 pb-3 text-center">
           <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
-            Welcome Back
+            Forgot Password
           </h1>
           <p className="text-sm text-gray-600">
-            Login to your account to continue
+            Enter your email to reset your password
           </p>
         </div>
         {/* email, passwords  and input field */}
@@ -31,53 +32,20 @@ function Login() {
               <input
                 className="w-full rounded-xl border border-gray-200 bg-white px-2 py-2 text-gray-900 focus:ring-2 focus:ring-purple-400 focus:outline-none"
                 type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 required
                 placeholder="Enter your email"
               />
             </div>
-            {/* password */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block font-semibold text-gray-900"
-                >
-                  Password
-                </label>
-                <Link
-                  to="/forgotPassword"
-                  className="text-sm font-semibold text-purple-600 hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <input
-                className="w-full rounded-xl border border-gray-200 bg-white px-2 py-2 text-gray-900 focus:ring-2 focus:ring-purple-400 focus:outline-none"
-                type="password"
-                required
-                placeholder="Enter your password"
-              />
-            </div>
             <Button
               size="lg"
+              disabled={!email}
               className="inline-flex w-full items-center justify-center gap-2 rounded-full text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
-              Login
+              Send Reset Link
             </Button>
           </form>
-
-          {/* dont have an account signup section */}
-          <div className="mt-4 text-center">
-            <p className="text-sm text-gray-600">
-              Dont have an account?{" "}
-              <Link
-                to="/registerUser"
-                className="text-sm font-bold text-purple-600 hover:underline"
-              >
-                Register here
-              </Link>
-            </p>
-          </div>
 
           {/* Back to Home */}
           <div className="mt-4 text-center">
@@ -85,7 +53,7 @@ function Login() {
               onClick={moveBack}
               className="cursor-pointer text-sm text-gray-600 hover:text-gray-900"
             >
-              ← Back to Home
+              ← Back to Login
             </button>
           </div>
         </div>
@@ -94,4 +62,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ForgotPassword;

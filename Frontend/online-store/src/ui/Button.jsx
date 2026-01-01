@@ -4,6 +4,7 @@ function Button({
   children,
   to,
   onClick,
+  disabled,
   variant = "default",
   size = "default",
   type = "button",
@@ -37,7 +38,12 @@ function Button({
   }
 
   return (
-    <button type={type} onClick={onClick} className={classes}>
+    <button
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      className={classes}
+    >
       {children}
     </button>
   );
