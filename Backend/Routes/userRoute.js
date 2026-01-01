@@ -25,7 +25,7 @@ router.post("/signup", signup);
 //for login
 router.post("/login", login);
 //for logout
-router.get("/logout", logout);
+router.post("/logout", logout);
 //for update password
 router.post("/updatePassword", protect, updatePassword);
 //for forgotPassword, just to get token

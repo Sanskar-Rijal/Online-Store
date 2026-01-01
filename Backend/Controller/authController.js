@@ -120,6 +120,8 @@ const logout = catchAsync(async (req, res, next) => {
   res.cookie("token", null, {
     expires: new Date(Date.now()),
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production", //only HTTPS in production
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", //required for cross-origin
   });
 
   res.status(200).json({

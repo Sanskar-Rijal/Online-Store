@@ -12,6 +12,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import ForgotPassword from "./pages/ForgotPassword";
 import Register from "./pages/Register";
+import { useAuthSync } from "./hooks/useAuth";
 
 const router = createBrowserRouter([
   {
@@ -67,10 +68,17 @@ const queryClient = new QueryClient({
   },
 });
 
+function AuthProvider({ children }) {
+  useAuthSync(); //to check user authentication status on app load
+  return children;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
       <ReactQueryDevtools initialIsOpen={false} />
       <Toaster
         position="top-right"

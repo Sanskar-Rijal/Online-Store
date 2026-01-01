@@ -24,7 +24,7 @@ const cartSlice = createSlice({
     addToCart(state, action) {
       //it basically means cart/addtoCart
       state.orderItems.push(action.payload);
-      state.totalPrice = +state.orderItems.price * state.orderItems.quantity;
+      state.totalPrice = +action.payload.price * action.payload.quantity;
       state.tax = (state.totalPrice * 0.13).toFixed(2);
       if (state.totalPrice > 1500) {
         state.shippingPrice = 0;
