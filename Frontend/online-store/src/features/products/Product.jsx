@@ -2,29 +2,27 @@ import { useQuery } from "@tanstack/react-query";
 import ProductCard from "./ProductCard";
 import { getAllProducts } from "../../services/apiProduct";
 import Spinner from "../../ui/Spinner";
-
 function Product({ category }) {
-  const { isPending, data, error } = useQuery({
-    queryKey: ["products", category], //unique key to identify the query
+  const { isPending, data } = useQuery({
+    queryKey: ["products", category],
     queryFn: () => getAllProducts({ category }),
   });
 
-  if (isPending) {
-    return (
-      <div className="flex justify-between">
-        <Spinner />;
-      </div>
-    );
-  }
-  const product = data.message.products;
-
-  console.log(error);
+  const products = data?.message?.products ?? [];
 
   return (
-    <div className="mb-8">
+    <div className="relative mb-8 min-h-[400px]">
+      {/* Spinner overlay */}
+      {isPending && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70">
+          <Spinner />
+        </div>
+      )}
+
+      {/* Product grid stays mounted */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {product.map((item) => (
-          <ProductCard product={item} key={item.id} />
+        {products.map((item) => (
+          <ProductCard product={item} key={item._id} />
         ))}
       </div>
     </div>
