@@ -32,43 +32,43 @@ const cartSlice = createSlice({
         state.shippingPrice = 120;
       }
     },
-  },
-  removeItem(state, action) {
-    //we pass here id of the product to be removed
-    const productId = action.payload;
-    state.orderItems = state.orderItems.filter(
-      (item) => item.product !== productId,
-    );
-  },
-  increaseItemQuantity(state, action) {
-    const productId = action.payload;
-    const item = state.orderItems.find((item) => item.product === productId);
-    item.quantity += 1;
-    state.totalPrice = state.totalPrice + item.price * item.quantity;
-    state.tax = (state.totalPrice * 0.13).toFixed(2);
-    if (state.totalPrice > 1500) {
-      state.shippingPrice = 0;
-    } else {
-      state.shippingPrice = 120;
-    }
-  },
-  decreaseItemQuantity(state, action) {
-    const productId = action.payload;
-    const item = state.orderItems.find((item) => item.product === productId);
-    item.quantiy -= 1;
-    state.totalPrice = state.totalPrice - item.price * item.quantity;
-    state.tax = (state.totalPrice * 0.13).toFixed(2);
-    if (state.totalPrice > 1500) {
-      state.shippingPrice = 0;
-    } else {
-      state.shippingPrice = 120;
-    }
-    if (item.quantity === 0) {
-      cartSlice.caseReducers.removeItem(state.action);
-    }
-  },
-  clearCart(state) {
-    state.orderItems = [];
+    removeItem(state, action) {
+      //we pass here id of the product to be removed
+      const productId = action.payload;
+      state.orderItems = state.orderItems.filter(
+        (item) => item.product !== productId,
+      );
+    },
+    increaseItemQuantity(state, action) {
+      const productId = action.payload;
+      const item = state.orderItems.find((item) => item.product === productId);
+      item.quantity += 1;
+      state.totalPrice = state.totalPrice + item.price * item.quantity;
+      state.tax = (state.totalPrice * 0.13).toFixed(2);
+      if (state.totalPrice > 1500) {
+        state.shippingPrice = 0;
+      } else {
+        state.shippingPrice = 120;
+      }
+    },
+    decreaseItemQuantity(state, action) {
+      const productId = action.payload;
+      const item = state.orderItems.find((item) => item.product === productId);
+      item.quantiy -= 1;
+      state.totalPrice = state.totalPrice - item.price * item.quantity;
+      state.tax = (state.totalPrice * 0.13).toFixed(2);
+      if (state.totalPrice > 1500) {
+        state.shippingPrice = 0;
+      } else {
+        state.shippingPrice = 120;
+      }
+      if (item.quantity === 0) {
+        cartSlice.caseReducers.removeItem(state.action);
+      }
+    },
+    clearCart(state) {
+      state.orderItems = [];
+    },
   },
 });
 

@@ -3,6 +3,7 @@ import useMoveBack from "../hooks/useMoveBack";
 import Button from "../ui/Button";
 import useLogin from "../hooks/useLogin";
 import { useForm } from "react-hook-form";
+import Loader from "../ui/Loader";
 
 function Login() {
   //custom hook to move back to previous page
@@ -17,6 +18,9 @@ function Login() {
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
+      {/* Loading Animation */}
+      {isPending && <Loader />}
+
       <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white/80 p-4">
         {/* welcome login to you account  */}
         <div className="space-y-1 pb-3 text-center">
