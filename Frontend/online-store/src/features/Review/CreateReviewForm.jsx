@@ -2,7 +2,7 @@ import { useState } from "react";
 import StarRating from "../../animations/StarRating";
 import Button from "../../ui/Button";
 
-function CreateReview() {
+function CreateReviewForm({ onClose }) {
   //to Get number of Stars Clicked
   const [count, setCount] = useState(0);
 
@@ -11,8 +11,8 @@ function CreateReview() {
   return (
     <div className="mb-8 rounded-lg border border-gray-200 bg-white">
       {/* Card Header */}
-      <div className="mb-8 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 sm:text-xl">
+      <div className="mb-5 p-6">
+        <h3 className="text-2xl font-semibold text-gray-900 sm:text-3xl">
           Write your Review
         </h3>
       </div>
@@ -49,6 +49,7 @@ function CreateReview() {
             </Button>
             <Button
               size="lg"
+              onClick={onClose}
               variant="back"
               className="inline-flex items-center justify-center rounded-full border border-gray-200 text-sm font-medium backdrop-blur transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
@@ -61,4 +62,4 @@ function CreateReview() {
   );
 }
 
-export default CreateReview;
+export default CreateReviewForm;

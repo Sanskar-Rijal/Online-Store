@@ -4,7 +4,7 @@ import AppLayout from "./pages/AppLayout";
 import Cart from "./pages/Cart";
 import WishList from "./pages/WishList";
 import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+
 import UserProfile from "./pages/UserProfile";
 import ProductDetail from "./pages/ProductDetail";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -41,10 +41,6 @@ const router = createBrowserRouter([
       {
         path: "/registerUser",
         element: <Register />,
-      },
-      {
-        path: "/signup",
-        element: <SignUp />,
       },
       {
         path: "/userProfile",

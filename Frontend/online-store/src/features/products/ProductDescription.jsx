@@ -68,7 +68,7 @@ function ProductDescription() {
 
   return (
     <div>
-      <Badge className="mb-4" variant="secondary">
+      <Badge className="mb-4 text-sm md:text-[14px]" variant="secondary">
         {product[0].category}
       </Badge>
       <h1 className="mb-4 text-3xl font-semibold text-gray-900 sm:text-4xl md:text-5xl">

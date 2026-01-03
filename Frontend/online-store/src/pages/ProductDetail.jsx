@@ -5,8 +5,9 @@ import ProductImages from "../features/products/ProductImages";
 import ProductDescription from "../features/products/ProductDescription";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import CreateReview from "../features/Review/CreateReview";
+import CreateReviewForm from "../features/Review/CreateReviewForm";
 import Modal from "../ui/Modal";
+import AddReview from "../features/Review/AddReview";
 
 function ProductDetail() {
   //go back to previous screeen
@@ -64,7 +65,7 @@ function ProductDetail() {
       <Button
         onClick={moveBack}
         variant="back"
-        className="mb-6 inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all hover:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+        className="mb-6 inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-all hover:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 md:text-lg"
       >
         <IoIosArrowBack className="h-4 w-4" />
         Back to Products
@@ -84,14 +85,15 @@ function ProductDetail() {
             Customer Reviews
           </h2>
           {isAuthenticated ? (
-            <Button
-              size="lg"
-              variant="back"
-              onClick={handleReviewForm}
-              className="inline-flex items-center justify-center rounded-xl border border-gray-200 text-sm font-medium backdrop-blur transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-            >
-              Write a Review
-            </Button>
+            // <Button
+            //   size="lg"
+            //   variant="back"
+            //   onClick={handleReviewForm}
+            //   className="inline-flex items-center justify-center rounded-xl border border-gray-200 text-sm font-medium backdrop-blur transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+            // >
+            //   Write a Review
+            // </Button>
+            <AddReview />
           ) : (
             <Button
               to="/login"
@@ -106,7 +108,7 @@ function ProductDetail() {
         {/* Review Form Goes here */}
         {showReviewForm && (
           <Modal onClose={handleReviewForm}>
-            <CreateReview />
+            <CreateReviewForm />
           </Modal>
         )}
         {/* Show list of available reviews */}
