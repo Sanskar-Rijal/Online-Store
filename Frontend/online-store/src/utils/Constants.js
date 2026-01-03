@@ -4,3 +4,4 @@ export const GET_PRODUCTS = "products";
 export const LOGIN_USER = "users/login";
 export const GET_MY_DETAILS = "users/getMe";
 export const LOGOUT_USER = "users/logout";
+export const FIND_PRODUCTS_BY_ID = "products";

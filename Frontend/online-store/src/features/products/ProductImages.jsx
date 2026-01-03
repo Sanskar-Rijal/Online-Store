@@ -3,64 +3,25 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 //Used in Product Details Page to show all the images of the product
 
-function ProductImages() {
+function ProductImages({ images }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   function handleNextImage() {
-    setCurrentImageIndex((prev) => (prev + 1) % product[0].images.length);
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
   }
   function handlePreviousImage() {
-    setCurrentImageIndex(
-      (prev) =>
-        (prev - 1 + product[0].images.length) % product[0].images.length,
-    );
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   }
-
-  const product = [
-    {
-      id: "abcd",
-      name: "Sanskar Rijal",
-      price: 19000,
-      description: "let it go let it go",
-      ratingsAverage: 5,
-      ratingsQuantity: 100,
-      images: [
-        {
-          public_id: "sample",
-          url: "https://i.imgur.com/sWodf8f.jpg",
-          id: "image1",
-        },
-        {
-          public_id: "sample",
-          url: "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/knife-head_0-e1436fc.png",
-          id: "image1",
-        },
-        {
-          public_id: "sample",
-          url: "https://i.imgur.com/sWodf8f.jpg",
-          id: "image1",
-        },
-        {
-          public_id: "sample",
-          url: "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/knife-head_0-e1436fc.png",
-          id: "image1",
-        },
-      ],
-      category: "Category kunai xaina pro ho",
-      seller: "Samsung",
-      stock: 50,
-    },
-  ];
 
   return (
     <div className="space-y-4">
       <div className="group relative">
         <img
           className="h-64 w-full rounded-2xl object-cover sm:h-96 lg:h-[500px]"
-          src={product[0].images[currentImageIndex].url}
-          alt={product.name}
+          src={images[currentImageIndex].url}
+          alt={images.id}
         />
         {/* give arrow to navigate between images */}
-        {product[0].images.length > 1 && (
+        {images.length > 1 && (
           <>
             <button
               onClick={handlePreviousImage}
@@ -80,16 +41,16 @@ function ProductImages() {
             </button>
             {/* Image Counter */}
             <div className="absolute right-4 bottom-4 rounded-full bg-gray-900/70 px-3 py-1 text-sm text-white">
-              {currentImageIndex + 1} / {product[0].images.length}
+              {currentImageIndex + 1} / {images.length}
             </div>
           </>
         )}
       </div>
 
       {/* Allowing user to click on available images to view */}
-      {product[0].images.length > 1 && (
+      {images.length > 1 && (
         <div className="grid grid-cols-4 gap-2">
-          {product[0].images.map((image, index) => (
+          {images.map((image, index) => (
             <button
               className={`relative overflow-hidden rounded-lg border-2 transition-all ${index === currentImageIndex ? `border-purple-600` : `border-gray-200 hover:border-purple-400`}`}
               onClick={() => setCurrentImageIndex(index)}
